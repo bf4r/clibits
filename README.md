@@ -7,12 +7,12 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - DVD screensaver
 - Change tick delay (between updates)
 - Exit with `Escape` or `q`.
+- Toggle screen clearing with `C`
 ### Coming soon
 - Changing colors
 - Color cycle
 - Rainbow mode
 - Custom text instead of "DVD"
-- Toggle screen clearing
 
 ## Coming soon
 Projects I have an idea/plan for but will be added later.

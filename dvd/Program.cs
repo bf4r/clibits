@@ -8,6 +8,7 @@ class Program
     static int directionY = 1;
     static string dvdText = "DVD";
     static int delayMs = 50;
+    static bool clearing = true;
     static void Main(string[] args)
     {
         Console.CursorVisible = false;
@@ -21,7 +22,7 @@ class Program
                 HandleCollision();
                 Draw();
                 Thread.Sleep(delayMs);
-                Console.Clear();
+                if (clearing) Console.Clear();
                 if (Console.KeyAvailable)
                 {
                     var ki = Console.ReadKey(true);
@@ -33,6 +34,9 @@ class Program
                             return;
                         case ConsoleKey.Add:
                             delayMs++;
+                            break;
+                        case ConsoleKey.C:
+                            clearing = !clearing;
                             break;
                         case ConsoleKey.Subtract:
                             if (delayMs > 0) delayMs--;
