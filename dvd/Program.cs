@@ -9,6 +9,7 @@ class Program
     static string dvdText = "DVD";
     static int delayMs = 50;
     static bool clearing = true;
+    static int hue = 0;
     static void Main(string[] args)
     {
         Console.CursorVisible = false;
@@ -66,6 +67,10 @@ class Program
         posX += directionX;
         posY += directionY;
     }
+    static void ChangeColor()
+    {
+        hue = Random.Shared.Next(0, 360);
+    }
     static void HandleCollision()
     {
         var textLength = dvdText.Length;
@@ -73,27 +78,32 @@ class Program
         {
             posX = Console.WindowWidth - textLength;
             directionX = -1;
+            ChangeColor();
         }
         if (posX <= 0)
         {
             posX = 0;
             directionX = 1;
+            ChangeColor();
         }
         if (posY <= 0)
         {
             posY = 0;
             directionY = 1;
+            ChangeColor();
         }
         if (posY >= Console.WindowHeight - 1)
         {
             posY = Console.WindowHeight - 1;
             directionY = -1;
+            ChangeColor();
         }
     }
     static void Draw()
     {
         try
         {
+            Utils.SetColor(Utils.HSVToRGB((int)((hue / 360.0) * 360) % 360, 1, 1));
             Console.SetCursorPosition(posX, posY);
             string newDvdText = dvdText;
             if (posX + dvdText.Length > Console.WindowWidth)
