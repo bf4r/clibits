@@ -20,3 +20,8 @@ Projects I have an idea/plan for but will be added later.
 - Move around
 - WASD movement
 - Change pixels with different colors
+
+### spinningcube
+- C#, dotnet console
+- Spinning 3D cube, customizable
+- Old local project, will be done once I port it
