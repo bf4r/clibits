@@ -32,9 +32,10 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - Vim-like controls
 - Move around with `WASD` or `HJKL` (vim keys)
 - Insert text at your position with `T` or `I` and `Enter` to confirm
-- Exit with `Escape`
+- Exit with `Escape` or `Q`
 ### Coming soon
 - Removing and editing text objects
+- Saving the map state to a file (json)
 - Colors (any RGB color)
 - Draw mode
 - More controls

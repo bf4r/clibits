@@ -49,6 +49,7 @@ public class Program
                     posX++;
                     break;
                 case ConsoleKey.Escape:
+                case ConsoleKey.Q:
                     Console.CursorVisible = true;
                     return;
                 case ConsoleKey.T:
@@ -75,12 +76,28 @@ public class Program
             Cell? cell = Cells[i];
             int wantX = cell.X - posX + (int)(width / 2);
             int wantY = cell.Y - posY + (int)(height / 2);
-            if (cell != null && wantX > 0 && wantX < width && wantY > 0 && wantY < height)
+            bool isInBounds = (wantX >= 0 && wantX < width && wantY >= 0 && wantY < height);
+            bool isOutOfBoundsLeftButSomeTextShouldShow = (wantY >= 0 && wantY < height && wantX < 0 && cell.Text != null && cell.Text.Length + wantX > 0);
+
+            if (cell != null && (isInBounds || isOutOfBoundsLeftButSomeTextShouldShow))
             {
                 try
                 {
-                    Console.SetCursorPosition(wantX, wantY);
-                    Console.Write(cell.Text ?? "");
+                    var text = cell.Text ?? "";
+                    if (isOutOfBoundsLeftButSomeTextShouldShow)
+                    {
+                        text = text.Substring(-wantX);
+                        Console.SetCursorPosition(0, wantY);
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(wantX, wantY);
+                        if (text.Length + wantX > width)
+                        {
+                            text = text.Substring(0, width - wantX);
+                        }
+                    }
+                    Console.Write(text);
                 }
                 catch (System.Exception)
                 {
