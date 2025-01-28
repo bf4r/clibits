@@ -25,12 +25,21 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - Change line symbol with `C`
 - Increase/decrease delay with `+` and `-`
 
-## Coming soon
-Projects I have an idea/plan for but will be added later.
-### drawmap
+## notemap
+### Features
 - C#, dotnet console
 - An infinite map of pixels/characters
-- Vim-like controls?
-- Move around
-- WASD movement
-- Change pixels with different colors
+- Vim-like controls
+- Move around with `WASD` or `HJKL` (vim keys)
+- Insert text at your position with `T` or `I` and `Enter` to confirm
+- Exit with `Escape`
+### Coming soon
+- Removing and editing text objects
+- Colors (any RGB color)
+- Draw mode
+- More controls
+- UI showing position etc.
+- Multiplayer?
+
+## Coming soon
+Projects I have an idea/plan for but will be added later... (none as of now)
