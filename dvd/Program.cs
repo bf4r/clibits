@@ -7,7 +7,7 @@ class Program
     static int directionX = 1;
     static int directionY = 1;
     static string dvdText = "DVD";
-    static int delayMs = 200;
+    static int delayMs = 50;
     static void Main(string[] args)
     {
         Console.CursorVisible = false;
@@ -25,9 +25,18 @@ class Program
                 if (Console.KeyAvailable)
                 {
                     var ki = Console.ReadKey(true);
-                    if (ki.Key == ConsoleKey.Escape)
+                    switch (ki.Key)
                     {
-                        break;
+                        case ConsoleKey.Escape:
+                        case ConsoleKey.Q:
+                            Console.CursorVisible = true;
+                            return;
+                        case ConsoleKey.Add:
+                            delayMs++;
+                            break;
+                        case ConsoleKey.Subtract:
+                            if (delayMs > 0) delayMs--;
+                            break;
                     }
                 }
             }
@@ -35,7 +44,6 @@ class Program
             {
             }
         }
-        Console.CursorVisible = true;
     }
     static void Move()
     {
