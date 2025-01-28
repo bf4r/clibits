@@ -41,6 +41,18 @@ class Program
                         case ConsoleKey.Subtract:
                             if (delayMs > 0) delayMs--;
                             break;
+                        case ConsoleKey.T:
+                            Console.CursorVisible = true;
+                            Console.Clear();
+                            var input = Console.ReadLine();
+                            if (!string.IsNullOrEmpty(input) && input.Length < Console.WindowWidth)
+                            {
+                                dvdText = input;
+                                posX = 0;
+                                posY = 0;
+                            }
+                            Console.CursorVisible = false;
+                            break;
                     }
                 }
             }
