@@ -18,7 +18,8 @@ public class Program
     {
         new Cell(1, 1, "Welcome, use HJKL/WASD to move around"),
         new Cell(1, 2, "I or T to place text, enter to confirm"),
-        new Cell(1, 3, "Escape to exit")
+        new Cell(1, 3, "R or Delete to remove a piece of text"),
+        new Cell(1, 4, "Escape to exit")
     };
     static int posX = 0;
     static int posY = 0;
@@ -61,6 +62,15 @@ public class Program
                         Cells.Add(new(posX + 1, posY, input));
                     }
                     Console.CursorVisible = false;
+                    break;
+                case ConsoleKey.R:
+                case ConsoleKey.Delete:
+                    // check if the player is on a piece of text
+                    var cell = Cells.FirstOrDefault(c => c.Y == posY && posX >= c.X && posX < c.X + c.Text?.Length);
+                    if (cell != null)
+                    {
+                        Cells.Remove(cell);
+                    }
                     break;
             }
             Draw();
