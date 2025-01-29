@@ -14,7 +14,7 @@ public class Game
             new(1, 1, "Welcome, use HJKL/WASD to move around"),
             new(1, 2, "I to place text, T to edit, enter to confirm"),
             new(1, 3, "R or Delete to remove a piece of text"),
-            new(1, 4, "Escape to exit")
+            new(1, 4, "Esc or Q to exit")
         };
         posX = 0;
         posY = 0;
@@ -105,22 +105,10 @@ public class Game
                                         Console.CursorVisible = true;
                                         Console.Write("Please enter the path of a .json file to save the data to: ");
                                         var input = Console.ReadLine() ?? "";
-                                        var fullPath = "";
-                                        if (Path.IsPathRooted(input))
+                                        var fullPath = Utils.GetFullPath(input);
+                                        if (!fullPath.EndsWith(".json"))
                                         {
-                                            fullPath = input;
-                                        }
-                                        else if (input.StartsWith("~/"))
-                                        {
-                                            if (OperatingSystem.IsLinux())
-                                                fullPath = $"/home/{Environment.UserName}/{input.Substring(2)}";
-                                            else if (OperatingSystem.IsWindows())
-                                                fullPath = $"C:\\Users\\{Environment.UserName}\\{input.Substring(2)}";
-                                        }
-                                        else
-                                        {
-                                            string workingDirectory = Directory.GetCurrentDirectory();
-                                            fullPath = Path.Combine(workingDirectory, input);
+                                            fullPath += ".json";
                                         }
                                         var parts = fullPath.Split(Path.DirectorySeparatorChar);
                                         var parentDirectory = string.Join(Path.DirectorySeparatorChar, parts.Take(parts.Length - 1));
@@ -132,6 +120,47 @@ public class Game
                                         Console.CursorVisible = false;
                                     }
                                     File.WriteAllText(FilePath, jsonText);
+                                    try
+                                    {
+                                        Console.SetCursorPosition(0, Console.WindowHeight);
+                                        Console.Write("Saved!");
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+                                }
+                                break;
+                            case ConsoleKey.L:
+                                {
+                                    Console.Clear();
+                                    Console.CursorVisible = true;
+                                    Console.Write("Please enter the path of a .json file to load data from: ");
+                                    var input = Console.ReadLine() ?? "";
+                                    var fullPath = Utils.GetFullPath(input);
+                                    if (!fullPath.EndsWith(".json") && !File.Exists(fullPath) && File.Exists(fullPath + ".json"))
+                                    {
+                                        fullPath += ".json";
+                                    }
+                                    var parts = fullPath.Split(Path.DirectorySeparatorChar);
+                                    var parentDirectory = string.Join(Path.DirectorySeparatorChar, parts.Take(parts.Length - 1));
+                                    if (File.Exists(fullPath))
+                                    {
+                                        FilePath = fullPath;
+                                        var jsonText = File.ReadAllText(fullPath);
+                                        try
+                                        {
+                                            var game = JsonSerializer.Deserialize<Game>(jsonText);
+                                            if (game != null)
+                                            {
+                                                game.Run();
+                                                Environment.Exit(0);
+                                            }
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
+                                    }
+                                    Console.CursorVisible = false;
                                 }
                                 break;
                         }

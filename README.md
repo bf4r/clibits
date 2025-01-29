@@ -35,10 +35,10 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - Exit with `Escape` or `Q`
 - Remove a text object with `R`
 - Edit a text object with `T`
-- Save the state to a file using `E` then `S`
 - UI showing position
+- Save the state to a file using `E` then `S`
+- Load the state from a file using `E` then `L`
 ### Coming soon
-- Loading a file
 - Colors (any RGB color)
 - Draw mode
 - More controls
