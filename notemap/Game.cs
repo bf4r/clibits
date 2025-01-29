@@ -7,6 +7,7 @@ public class Game
     public int posX { get; set; }
     public int posY { get; set; }
     public static string? FilePath { get; set; } = null;
+    public static string Clipboard { get; set; } = "";
     public void Run()
     {
         Console.CursorVisible = false;
@@ -52,8 +53,7 @@ public class Game
                 case ConsoleKey.R:
                 case ConsoleKey.Delete:
                     {
-                        // check if the player is on a piece of text
-                        var cell = Cells.FirstOrDefault(c => c.Y == posY && posX >= c.X && posX < c.X + c.Text?.Length);
+                        var cell = GetCellPlayerIsOn();
                         if (cell != null)
                         {
                             Cells.Remove(cell);
@@ -62,9 +62,8 @@ public class Game
                     break;
                 case ConsoleKey.T:
                     {
-                        // check if the player is on a piece of text
                         // move to the start of it and edit it
-                        var cell = Cells.FirstOrDefault(c => c.Y == posY && posX >= c.X && posX < c.X + c.Text?.Length);
+                        var cell = GetCellPlayerIsOn();
                         if (cell != null)
                         {
                             posX = cell.X - 1;
@@ -154,9 +153,28 @@ public class Game
                         }
                     }
                     break;
+                case ConsoleKey.Y:
+                    {
+                        // copy its text to the notemap clipboard
+                        var cell = GetCellPlayerIsOn();
+                        if (cell != null && cell.Text != null)
+                        {
+                            Clipboard = cell.Text;
+                        }
+                    }
+                    break;
+                case ConsoleKey.P:
+                    {
+                        Cells.Add(new Cell(posX + 1, posY, Clipboard));
+                    }
+                    break;
             }
             Draw();
         }
+    }
+    Cell? GetCellPlayerIsOn()
+    {
+        return Cells.FirstOrDefault(c => c.Y == posY && posX >= c.X && posX < c.X + c.Text?.Length);
     }
     void Draw()
     {

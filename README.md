@@ -38,6 +38,8 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - UI showing position
 - Save the state to a file using `E` then `S`
 - Load the state from a file using `E` then `L`
+- Copy (yank) a cell with `Y`
+- Paste a copied cell with `P`
 ### Coming soon
 - Colors (any RGB color)
 - Draw mode
