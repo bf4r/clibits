@@ -8,6 +8,7 @@ public class Game
     public int posY { get; set; }
     public static string? FilePath { get; set; } = null;
     public static string Clipboard { get; set; } = "";
+    public List<Cell> FollowingCells { get; set; } = new();
     public void Run()
     {
         Console.CursorVisible = false;
@@ -22,18 +23,22 @@ public class Game
                 case ConsoleKey.W:
                 case ConsoleKey.K:
                     posY--;
+                    MoveFollowingCells(0, -1);
                     break;
                 case ConsoleKey.A:
                 case ConsoleKey.H:
                     posX--;
+                    MoveFollowingCells(-1, 0);
                     break;
                 case ConsoleKey.S:
                 case ConsoleKey.J:
                     posY++;
+                    MoveFollowingCells(0, 1);
                     break;
                 case ConsoleKey.D:
                 case ConsoleKey.L:
                     posX++;
+                    MoveFollowingCells(1, 0);
                     break;
                 case ConsoleKey.Escape:
                 case ConsoleKey.Q:
@@ -168,8 +173,33 @@ public class Game
                         Cells.Add(new Cell(posX + 1, posY, Clipboard));
                     }
                     break;
+                case ConsoleKey.M:
+                    {
+                        var cell = GetCellPlayerIsOn();
+                        if (cell != null)
+                        {
+                            if (FollowingCells.Contains(cell))
+                            {
+                                FollowingCells.Remove(cell);
+                            }
+                            else
+                            {
+                                FollowingCells.Add(cell);
+                            }
+                        }
+                    }
+                    break;
             }
             Draw();
+        }
+    }
+    void MoveFollowingCells(int x, int y)
+    {
+        for (int i = 0; i < FollowingCells.Count; i++)
+        {
+            var cell = FollowingCells[i];
+            cell.X += x;
+            cell.Y += y;
         }
     }
     Cell? GetCellPlayerIsOn()

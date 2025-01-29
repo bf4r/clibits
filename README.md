@@ -31,15 +31,16 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - An infinite map of pixels/characters
 - Vim-like controls
 - Move around with `WASD` or `HJKL` (vim keys)
-- Insert text at your position with `I` and `Enter` to confirm
+- Insert a text cell at your position with `I` and `Enter` to confirm
 - Exit with `Escape` or `Q`
-- Remove a text object with `R`
-- Edit a text object with `T`
+- Remove a cell with `R`
+- Edit a cell with `T`
 - UI showing position
 - Save the state to a file using `E` then `S`
 - Load the state from a file using `E` then `L`
 - Copy (yank) a cell with `Y`
 - Paste a copied cell with `P`
+- Toggle the current cell to follow you with `M`
 ### Coming soon
 - Colors (any RGB color)
 - Draw mode
