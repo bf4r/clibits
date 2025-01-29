@@ -36,12 +36,12 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - Remove a text object with `R`
 - Edit a text object with `T`
 - Save the state to a file using `E` then `S`
+- UI showing position
 ### Coming soon
 - Loading a file
 - Colors (any RGB color)
 - Draw mode
 - More controls
-- UI showing position etc.
 - Multiplayer?
 
 ## Coming soon

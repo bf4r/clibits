@@ -144,6 +144,8 @@ public class Game
     void Draw()
     {
         Console.Clear();
+        Console.SetCursorPosition(0, 0);
+        Console.Write($"[{posX}, {posY}]");
         var width = Console.WindowWidth;
         var height = Console.WindowHeight;
         for (int i = 0; i < Cells.Count; i++)
