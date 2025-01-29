@@ -35,8 +35,9 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - Exit with `Escape` or `Q`
 - Remove a text object with `R`
 - Edit a text object with `T`
+- Save the state to a file using `E` then `S`
 ### Coming soon
-- Saving the map state to a file (json)
+- Loading a file
 - Colors (any RGB color)
 - Draw mode
 - More controls

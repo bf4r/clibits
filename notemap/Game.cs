@@ -1,10 +1,12 @@
 namespace notemap;
+using System.Text.Json;
 
 public class Game
 {
     public List<Cell> Cells { get; set; }
     public int posX { get; set; }
     public int posY { get; set; }
+    public static string? FilePath = null;
     public Game()
     {
         Cells = new()
@@ -49,13 +51,15 @@ public class Game
                     Console.CursorVisible = true;
                     return;
                 case ConsoleKey.I:
-                    Console.CursorVisible = true;
-                    var input = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(input))
                     {
-                        Cells.Add(new(posX + 1, posY, input));
+                        Console.CursorVisible = true;
+                        var input = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(input))
+                        {
+                            Cells.Add(new(posX + 1, posY, input));
+                        }
+                        Console.CursorVisible = false;
                     }
-                    Console.CursorVisible = false;
                     break;
                 case ConsoleKey.R:
                 case ConsoleKey.Delete:
@@ -82,6 +86,54 @@ public class Game
                             Console.CursorVisible = true;
                             key = ConsoleKey.I;
                             goto again;
+                        }
+                    }
+                    break;
+                case ConsoleKey.E:
+                    {
+                        // mode for more options that don't fit into common keys
+                        var ki2 = Console.ReadKey(true);
+                        var key2 = ki2.Key;
+                        switch (key2)
+                        {
+                            case ConsoleKey.S:
+                                {
+                                    Console.Clear();
+                                    string jsonText = JsonSerializer.Serialize(this);
+                                    if (FilePath == null)
+                                    {
+                                        Console.CursorVisible = true;
+                                        Console.Write("Please enter the path of a .json file to save the data to: ");
+                                        var input = Console.ReadLine() ?? "";
+                                        var fullPath = "";
+                                        if (Path.IsPathRooted(input))
+                                        {
+                                            fullPath = input;
+                                        }
+                                        else if (input.StartsWith("~/"))
+                                        {
+                                            if (OperatingSystem.IsLinux())
+                                                fullPath = $"/home/{Environment.UserName}/{input.Substring(2)}";
+                                            else if (OperatingSystem.IsWindows())
+                                                fullPath = $"C:\\Users\\{Environment.UserName}\\{input.Substring(2)}";
+                                        }
+                                        else
+                                        {
+                                            string workingDirectory = Directory.GetCurrentDirectory();
+                                            fullPath = Path.Combine(workingDirectory, input);
+                                        }
+                                        var parts = fullPath.Split(Path.DirectorySeparatorChar);
+                                        var parentDirectory = string.Join(Path.DirectorySeparatorChar, parts.Take(parts.Length - 1));
+                                        if (!Directory.Exists(parentDirectory))
+                                        {
+                                            Directory.CreateDirectory(parentDirectory);
+                                        }
+                                        FilePath = fullPath;
+                                        Console.CursorVisible = false;
+                                    }
+                                    File.WriteAllText(FilePath, jsonText);
+                                }
+                                break;
                         }
                     }
                     break;
