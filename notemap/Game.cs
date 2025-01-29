@@ -155,6 +155,52 @@ public class Game
                                     Console.CursorVisible = false;
                                 }
                                 break;
+                            case ConsoleKey.J:
+                                {
+                                    // jump to coordinates
+                                    var ki3 = Console.ReadKey(true);
+                                    var key3 = ki3.Key;
+                                    switch (key3)
+                                    {
+                                        case ConsoleKey.X:
+                                            {
+                                                Console.CursorVisible = true;
+                                                Console.Clear();
+                                                Console.Write("Enter the X coordinate to jump to: ");
+                                                var input = Console.ReadLine();
+                                                Console.CursorVisible = false;
+                                                if (!int.TryParse(input, out int x))
+                                                {
+                                                    break;
+                                                }
+                                                posX = x;
+                                            }
+                                            break;
+                                        case ConsoleKey.Y:
+                                            {
+                                                Console.CursorVisible = true;
+                                                Console.Clear();
+                                                Console.Write("Enter the Y coordinate to jump to: ");
+                                                var input = Console.ReadLine();
+                                                Console.CursorVisible = false;
+                                                if (!int.TryParse(input, out int y))
+                                                {
+                                                    break;
+                                                }
+                                                posY = y;
+                                            }
+                                            break;
+                                        case ConsoleKey.S:
+                                        case ConsoleKey.Multiply:
+                                            {
+                                                // jump to spawn
+                                                posX = 0;
+                                                posY = 0;
+                                            }
+                                            break;
+                                    }
+                                }
+                                break;
                         }
                     }
                     break;
