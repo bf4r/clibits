@@ -31,10 +31,10 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - An infinite map of pixels/characters
 - Vim-like controls
 - Move around with `WASD` or `HJKL` (vim keys)
-- Insert text at your position with `T` or `I` and `Enter` to confirm
+- Insert text at your position with `I` and `Enter` to confirm
 - Exit with `Escape` or `Q`
-- Removing text objects
-- Editing text objects
+- Remove a text object with `R`
+- Edit a text object with `T`
 ### Coming soon
 - Saving the map state to a file (json)
 - Colors (any RGB color)
