@@ -34,8 +34,8 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - Insert text at your position with `T` or `I` and `Enter` to confirm
 - Exit with `Escape` or `Q`
 - Removing text objects
-### Coming soon
 - Editing text objects
+### Coming soon
 - Saving the map state to a file (json)
 - Colors (any RGB color)
 - Draw mode

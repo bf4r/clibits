@@ -10,7 +10,7 @@ public class Game
         Cells = new()
         {
             new(1, 1, "Welcome, use HJKL/WASD to move around"),
-            new(1, 2, "I or T to place text, enter to confirm"),
+            new(1, 2, "I to place text, T to edit, enter to confirm"),
             new(1, 3, "R or Delete to remove a piece of text"),
             new(1, 4, "Escape to exit")
         };
@@ -25,6 +25,7 @@ public class Game
         {
             var ki = Console.ReadKey(true);
             var key = ki.Key;
+        again:
             switch (key)
             {
                 case ConsoleKey.W:
@@ -47,7 +48,6 @@ public class Game
                 case ConsoleKey.Q:
                     Console.CursorVisible = true;
                     return;
-                case ConsoleKey.T:
                 case ConsoleKey.I:
                     Console.CursorVisible = true;
                     var input = Console.ReadLine();
@@ -59,11 +59,30 @@ public class Game
                     break;
                 case ConsoleKey.R:
                 case ConsoleKey.Delete:
-                    // check if the player is on a piece of text
-                    var cell = Cells.FirstOrDefault(c => c.Y == posY && posX >= c.X && posX < c.X + c.Text?.Length);
-                    if (cell != null)
                     {
-                        Cells.Remove(cell);
+                        // check if the player is on a piece of text
+                        var cell = Cells.FirstOrDefault(c => c.Y == posY && posX >= c.X && posX < c.X + c.Text?.Length);
+                        if (cell != null)
+                        {
+                            Cells.Remove(cell);
+                        }
+                    }
+                    break;
+                case ConsoleKey.T:
+                    {
+                        // check if the player is on a piece of text
+                        // move to the start of it and edit it
+                        var cell = Cells.FirstOrDefault(c => c.Y == posY && posX >= c.X && posX < c.X + c.Text?.Length);
+                        if (cell != null)
+                        {
+                            posX = cell.X - 1;
+                            posY = cell.Y;
+                            Cells.Remove(cell);
+                            Draw();
+                            Console.CursorVisible = true;
+                            key = ConsoleKey.I;
+                            goto again;
+                        }
                     }
                     break;
             }
