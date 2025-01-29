@@ -1,24 +1,12 @@
 namespace notemap;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 public class Game
 {
-    public List<Cell> Cells { get; set; }
+    public List<Cell> Cells { get; set; } = new();
     public int posX { get; set; }
     public int posY { get; set; }
-    public static string? FilePath = null;
-    public Game()
-    {
-        Cells = new()
-        {
-            new(1, 1, "Welcome, use HJKL/WASD to move around"),
-            new(1, 2, "I to place text, T to edit, enter to confirm"),
-            new(1, 3, "R or Delete to remove a piece of text"),
-            new(1, 4, "Esc or Q to exit")
-        };
-        posX = 0;
-        posY = 0;
-    }
+    public static string? FilePath { get; set; } = null;
     public void Run()
     {
         Console.CursorVisible = false;
@@ -99,7 +87,7 @@ public class Game
                             case ConsoleKey.S:
                                 {
                                     Console.Clear();
-                                    string jsonText = JsonSerializer.Serialize(this);
+                                    string jsonText = JsonConvert.SerializeObject(this);
                                     if (FilePath == null)
                                     {
                                         Console.CursorVisible = true;
@@ -149,7 +137,7 @@ public class Game
                                         var jsonText = File.ReadAllText(fullPath);
                                         try
                                         {
-                                            var game = JsonSerializer.Deserialize<Game>(jsonText);
+                                            var game = JsonConvert.DeserializeObject<Game>(jsonText);
                                             if (game != null)
                                             {
                                                 game.Run();

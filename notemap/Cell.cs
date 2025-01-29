@@ -1,4 +1,5 @@
 namespace notemap;
+using Newtonsoft.Json;
 
 public class Cell
 {
@@ -11,4 +12,6 @@ public class Cell
         Y = y;
         Text = text;
     }
+    [JsonConstructor]
+    public Cell() { }
 }
