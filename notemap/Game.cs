@@ -7,7 +7,7 @@ public class Game
     public int posX { get; set; }
     public int posY { get; set; }
     public static string? FilePath { get; set; } = null;
-    public static string Clipboard { get; set; } = "";
+    public static Cell? Clipboard { get; set; } = null;
     public List<Cell> FollowingCells { get; set; } = new();
     public void Run()
     {
@@ -50,7 +50,7 @@ public class Game
                         var input = Console.ReadLine();
                         if (!string.IsNullOrEmpty(input))
                         {
-                            Cells.Add(new(posX + 1, posY, input));
+                            Cells.Add(new(posX + 1, posY, input, ConsoleColor.White));
                         }
                         Console.CursorVisible = false;
                     }
@@ -162,15 +162,18 @@ public class Game
                     {
                         // copy its text to the notemap clipboard
                         var cell = GetCellPlayerIsOn();
-                        if (cell != null && cell.Text != null)
+                        if (cell != null)
                         {
-                            Clipboard = cell.Text;
+                            Clipboard = cell;
                         }
                     }
                     break;
                 case ConsoleKey.P:
                     {
-                        Cells.Add(new Cell(posX + 1, posY, Clipboard));
+                        if (Clipboard != null)
+                        {
+                            Cells.Add(new Cell(posX + 1, posY, Clipboard.Text, Clipboard.Color));
+                        }
                     }
                     break;
                 case ConsoleKey.M:
@@ -186,6 +189,38 @@ public class Game
                             {
                                 FollowingCells.Add(cell);
                             }
+                        }
+                    }
+                    break;
+                case ConsoleKey.G:
+                    {
+                        var cell = GetCellPlayerIsOn();
+                        if (cell != null)
+                        {
+                            // cycle color
+                            var colors = Enum.GetValues<ConsoleColor>().Cast<ConsoleColor>().ToList();
+                            var currentColor = cell.Color;
+                            var currentColorIndex = 0;
+                            for (int i = 0; i < colors.Count; i++)
+                            {
+                                if (colors[i] == currentColor)
+                                {
+                                    currentColorIndex = i;
+                                    break;
+                                }
+                            }
+                        pickIndexAgain:
+                            currentColorIndex++;
+                            if (currentColorIndex >= colors.Count)
+                            {
+                                currentColorIndex = 0;
+                            }
+                            var newColor = colors[currentColorIndex];
+                            if (newColor == ConsoleColor.Black)
+                            {
+                                goto pickIndexAgain;
+                            }
+                            cell.Color = newColor;
                         }
                     }
                     break;
@@ -209,6 +244,7 @@ public class Game
     void Draw()
     {
         Console.Clear();
+        Console.ResetColor();
         Console.SetCursorPosition(0, 0);
         Console.Write($"[{posX}, {posY}]");
         var width = Console.WindowWidth;
@@ -239,6 +275,7 @@ public class Game
                             text = text.Substring(0, width - wantX);
                         }
                     }
+                    Console.ForegroundColor = cell.Color;
                     Console.Write(text);
                 }
                 catch (System.Exception)
@@ -248,6 +285,7 @@ public class Game
         }
         try
         {
+            Console.ResetColor();
             // player
             Console.SetCursorPosition((int)(width / 2), (int)(height / 2));
             Console.Write('>');

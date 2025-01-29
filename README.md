@@ -41,10 +41,9 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - Copy (yank) a cell with `Y`
 - Paste a copied cell with `P`
 - Toggle the current cell to follow you with `M`
+- Cycle to change the cell color with `G` (15 colors (no black))
 ### Coming soon
-- Colors (any RGB color)
-- Draw mode
-- More controls
+- Draw mode?
 - Multiplayer?
 
 ## Coming soon
