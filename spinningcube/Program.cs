@@ -34,7 +34,7 @@
             angleX = 0;
             angleY = 0;
             angleZ = 0;
-            MsDelay = 1;
+            MsDelay = 15;
             CyclesPerTick = 1;
             Thickness = 2;
             Symbol = "█";
