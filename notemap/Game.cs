@@ -17,28 +17,33 @@ public class Game
         {
             var ki = Console.ReadKey(true);
             var key = ki.Key;
+            int moveStep = 1;
+            if (ki.Modifiers == ConsoleModifiers.Shift)
+            {
+                moveStep = 5;
+            }
         again:
             switch (key)
             {
                 case ConsoleKey.W:
                 case ConsoleKey.K:
-                    posY--;
-                    MoveFollowingCells(0, -1);
+                    posY -= moveStep;
+                    MoveFollowingCells(0, -moveStep);
                     break;
                 case ConsoleKey.A:
                 case ConsoleKey.H:
-                    posX--;
-                    MoveFollowingCells(-1, 0);
+                    posX -= moveStep;
+                    MoveFollowingCells(-moveStep, 0);
                     break;
                 case ConsoleKey.S:
                 case ConsoleKey.J:
-                    posY++;
-                    MoveFollowingCells(0, 1);
+                    posY += moveStep;
+                    MoveFollowingCells(0, moveStep);
                     break;
                 case ConsoleKey.D:
                 case ConsoleKey.L:
-                    posX++;
-                    MoveFollowingCells(1, 0);
+                    posX += moveStep;
+                    MoveFollowingCells(moveStep, 0);
                     break;
                 case ConsoleKey.Escape:
                 case ConsoleKey.Q:

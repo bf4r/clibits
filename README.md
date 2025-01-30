@@ -43,6 +43,7 @@ A DVD screensaver. The text "DVD" bouncing across the console window at a given 
 - Toggle the current cell to follow you with `M`
 - Cycle to change the cell color with `G` (15 colors (no black))
 - Jump to coordinates with `E` then `J` then either `X`, `Y` or `S` (0, 0)
+- Hold `Shift` to move faster
 ### Coming soon
 - Tooltips at the bottom for pressed keys, what keys to press etc.
 - Draw mode?
