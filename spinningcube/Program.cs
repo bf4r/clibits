@@ -3,21 +3,21 @@
     public class Program
     {
         static float[,] cubeVertices = {
-        {-1, -1, -1},
-        {-1, -1,  1},
-        {-1,  1, -1},
-        {-1,  1,  1},
-        { 1, -1, -1},
-        { 1, -1,  1},
-        { 1,  1, -1},
-        { 1,  1,  1}
-    };
+            {-1, -1, -1},
+            {-1, -1,  1},
+            {-1,  1, -1},
+            {-1,  1,  1},
+            { 1, -1, -1},
+            { 1, -1,  1},
+            { 1,  1, -1},
+            { 1,  1,  1}
+        };
 
         static int[,] cubeEdges = {
-        {0, 1}, {1, 3}, {3, 2}, {2, 0},
-        {4, 5}, {5, 7}, {7, 6}, {6, 4},
-        {0, 4}, {1, 5}, {2, 6}, {3, 7}
-    };
+            {0, 1}, {1, 3}, {3, 2}, {2, 0},
+            {4, 5}, {5, 7}, {7, 6}, {6, 4},
+            {0, 4}, {1, 5}, {2, 6}, {3, 7}
+        };
 
         static float angleX, angleY, angleZ;
         static int MsDelay = 15;
@@ -29,6 +29,9 @@
         static int ZChangeMult = 4;
         static bool ShowInfo = false;
         static bool Clearing = true;
+        static bool FreezeFrame = false;
+
+        private static float frozenAngleX, frozenAngleY, frozenAngleZ;
         public static void Reset()
         {
             angleX = 0;
@@ -43,6 +46,7 @@
             ZChangeMult = 4;
             ShowInfo = false;
             Clearing = true;
+            FreezeFrame = false;
         }
         public static void Main(string[] args)
         {
@@ -50,6 +54,7 @@
             int width = Console.WindowWidth;
             int height = Console.WindowHeight;
             long it = 0;
+
             while (true)
             {
                 it++;
@@ -59,35 +64,39 @@
                     {
                         width = Console.WindowWidth;
                         height = Console.WindowHeight;
+                        Console.Clear();
                     }
+
                     if (Clearing)
                     {
                         Console.Clear();
                     }
+
                     if (ShowInfo)
                     {
-                        var info = "[*,/] Thickness: " + Thickness + ", [+/-] Delay: " + MsDelay + ", [M] Switch color mode, [J/L] Cycles per tick: " + CyclesPerTick + ", [C] Symbol: " + Symbol + $", [A,D,S,W,Q,E] Change angle rates ({XChangeMult}, {YChangeMult}, {ZChangeMult}), [O] Clearing: {Clearing} [F1] Hide menu, [Esc] Exit";
+                        var info = "[*,/] Thickness: " + Thickness + ", [+/-] Delay: " + MsDelay + ", [M] Switch color mode, [J/L] Cycles per tick: " + CyclesPerTick + ", [C] Symbol: " + Symbol + $", [A,D,S,W,Q,E] Change angle rates ({XChangeMult}, {YChangeMult}, {ZChangeMult}), [O] Clearing: {Clearing} [F] Freeze frame {FreezeFrame} [F1] Hide menu, [Esc] Exit";
                         Console.SetCursorPosition(0, 0);
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write(info);
                     }
-                    // rotation matrices for X, Y, Z
-                    float cosX = (float)Math.Cos(angleX), sinX = (float)Math.Sin(angleX);
-                    float cosY = (float)Math.Cos(angleY), sinY = (float)Math.Sin(angleY);
-                    float cosZ = (float)Math.Cos(angleZ), sinZ = (float)Math.Sin(angleZ);
+
+                    float currentAngleX = FreezeFrame ? frozenAngleX : angleX;
+                    float currentAngleY = FreezeFrame ? frozenAngleY : angleY;
+                    float currentAngleZ = FreezeFrame ? frozenAngleZ : angleZ;
+
+                    float cosX = (float)Math.Cos(currentAngleX), sinX = (float)Math.Sin(currentAngleX);
+                    float cosY = (float)Math.Cos(currentAngleY), sinY = (float)Math.Sin(currentAngleY);
+                    float cosZ = (float)Math.Cos(currentAngleZ), sinZ = (float)Math.Sin(currentAngleZ);
 
                     StringsToPrint.Clear();
 
                     for (int i = 0; i < cubeEdges.GetLength(0); i++)
                     {
-                        // get the vertices of the edge
                         int startVertIndex = cubeEdges[i, 0];
                         int endVertIndex = cubeEdges[i, 1];
-                        // rotate the start vertex
                         float[] rotatedStartVertex = RotateVertex(cubeVertices[startVertIndex, 0], cubeVertices[startVertIndex, 1], cubeVertices[startVertIndex, 2], cosX, sinX, cosY, sinY, cosZ, sinZ);
-                        // rotate the end vertex
                         float[] rotatedEndVertex = RotateVertex(cubeVertices[endVertIndex, 0], cubeVertices[endVertIndex, 1], cubeVertices[endVertIndex, 2], cosX, sinX, cosY, sinY, cosZ, sinZ);
-                        // project the 3D coordinates to 2D screen space
+
                         int startX = (int)((rotatedStartVertex[0] + 2) * width / 4);
                         int startY = (int)((rotatedStartVertex[1] + 2) * height / 4);
                         int endX = (int)((rotatedEndVertex[0] + 2) * width / 4);
@@ -105,40 +114,42 @@
                         Console.Write(kvp.Value);
                     }
 
-                    angleX += 0.01f * XChangeMult;
-                    angleY += 0.01f * YChangeMult;
-                    angleZ += 0.01f * ZChangeMult;
+                    if (!FreezeFrame)
+                    {
+                        angleX += 0.01f * XChangeMult;
+                        angleY += 0.01f * YChangeMult;
+                        angleZ += 0.01f * ZChangeMult;
+                    }
 
                     if (it % CyclesPerTick == 0)
                     {
                         Thread.Sleep(MsDelay);
                     }
+
                     if (Console.KeyAvailable)
                     {
                         var ki = Console.ReadKey(true);
                         var key = ki.Key;
-                        var kc = ki.KeyChar;
-                        var shift = ki.Modifiers.HasFlag(ConsoleModifiers.Shift);
-                        var alt = ki.Modifiers.HasFlag(ConsoleModifiers.Alt);
+
                         switch (key)
                         {
                             case ConsoleKey.D:
-                                XChangeMult++;
+                                if (FreezeFrame) frozenAngleX += 0.01f * XChangeMult; else XChangeMult++;
                                 break;
                             case ConsoleKey.A:
-                                XChangeMult--;
+                                if (FreezeFrame) frozenAngleX -= 0.01f * XChangeMult; else XChangeMult--;
                                 break;
                             case ConsoleKey.W:
-                                YChangeMult++;
+                                if (FreezeFrame) frozenAngleY += 0.01f * YChangeMult; else YChangeMult++;
                                 break;
                             case ConsoleKey.S:
-                                YChangeMult--;
+                                if (FreezeFrame) frozenAngleY -= 0.01f * YChangeMult; else YChangeMult--;
                                 break;
                             case ConsoleKey.E:
-                                ZChangeMult++;
+                                if (FreezeFrame) frozenAngleZ += 0.01f * ZChangeMult; else ZChangeMult++;
                                 break;
                             case ConsoleKey.Q:
-                                ZChangeMult--;
+                                if (FreezeFrame) frozenAngleZ -= 0.01f * ZChangeMult; else ZChangeMult--;
                                 break;
                             case ConsoleKey.L:
                                 CyclesPerTick++;
@@ -155,9 +166,6 @@
                                 return;
                             case ConsoleKey.Multiply:
                                 Thickness++;
-                                break;
-                            case ConsoleKey.Spacebar:
-                                Console.ReadKey(true);
                                 break;
                             case ConsoleKey.Divide:
                                 if (Thickness > 1)
@@ -181,10 +189,6 @@
                                 Console.Clear();
                                 Console.Write("Enter the symbol: ");
                                 Symbol = Console.ReadLine() ?? "";
-                                if (Symbol == "fb")
-                                {
-                                    Symbol = "█";
-                                }
                                 Console.Clear();
                                 break;
                             case ConsoleKey.R:
@@ -196,40 +200,46 @@
                             case ConsoleKey.M:
                                 SwitchColorMode();
                                 break;
+                            case ConsoleKey.F:
+                                FreezeFrame = !FreezeFrame;
+                                if (FreezeFrame)
+                                {
+                                    frozenAngleX = angleX;
+                                    frozenAngleY = angleY;
+                                    frozenAngleZ = angleZ;
+                                }
+                                break;
                         }
                     }
                 }
                 catch (Exception)
                 {
+                    //just catch all
                 }
             }
         }
 
         static float[] RotateVertex(float x, float y, float z, float cosX, float sinX, float cosY, float sinY, float cosZ, float sinZ)
         {
-            // rotate around
-
-            // x
             float newY = y * cosX - z * sinX;
             float newZ = y * sinX + z * cosX;
-
-            // y
             float newX = x * cosY + newZ * sinY;
             newZ = -x * sinY + newZ * cosY;
-
-            // z
             x = newX * cosZ - newY * sinZ;
             y = newX * sinZ + newY * cosZ;
 
             return [x, y, newZ];
         }
+
         public enum ColorType
         {
             RainbowEdges = 0,
             Solid,
             RainbowCycle,
         }
+
         static ColorType colors = ColorType.RainbowEdges;
+
         static void SwitchColorMode()
         {
             colors++;
@@ -239,9 +249,9 @@
                 colors = 0;
             }
         }
-        // faster way
-        // buffer
+
         public static Dictionary<(int, int), string> StringsToPrint = new Dictionary<(int, int), string>();
+
         static void DrawLineToBuffer(int x1, int y1, int x2, int y2, int width, long outerIt)
         {
             int dx = x2 - x1;
